@@ -15,10 +15,14 @@ Project repo: https://github.com/
 
 ```bash / CMD
 conda create -n llmapp python=3.8 -y
+or you below command
+python -m venv <envirnoment_name>
 ```
 
 ```bash / CMD
-conda activate llmapp
+conda activate <envirnoment_name>
+or
+<envirnoment_name>\Scripts\activate 
 ```
 
 
@@ -54,3 +58,5 @@ open up localhost:
 - Gemini
 - Gemini 1.5 Pro
 - ChoromaDB
+
+### I have used Google Gemini Open Source API for this project. It's totally upto you which API you guys want to use. Either you guys can use the OpenAI API or Hugging Face Open Source API model too. 
