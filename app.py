@@ -8,10 +8,12 @@ from flask import Flask, render_template, jsonify, request
 from langchain.memory import ConversationSummaryMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.schema import StrOutputParser
 
 from src.logger import logging
 from src import constants
-from src.helper import repo_ingestion, load_embedding_model
+from src.helper import repo_ingestion, load_embedding_model, get_prompt, format_docs
 
 load_dotenv()
 warnings.filterwarnings("ignore")
@@ -40,6 +42,20 @@ qa = ConversationalRetrievalChain.from_llm(
     memory=memory
 )
 
+## Creating Rag Chain using LLM expressions
+llm_prompt = get_prompt()
+rag_chain = (
+    {
+        "context": vectorDB.as_retriever(
+            search_type="mmr", search_kwargs={"k": constants.TOP_SIMILAR_RECORDS}
+        ) | format_docs, 
+        "question": RunnablePassthrough()
+    }
+    | llm_prompt
+    | llm_model
+    | StrOutputParser()
+)
+
 @app.route('/', methods=["GET", "POST"])
 def index():
     return render_template('index.html')
@@ -65,9 +81,14 @@ def chat():
     if input == "clear":
         os.system("rm -rf repo")
 
-    result = qa.invoke(input)
-    print(result['answer'])
-    return str(result["answer"])
+    ## Using Langchain QA Chain
+    # result = qa.invoke(input)
+    # print(result['answer'])
+    # return str(result["answer"])
+    ## Using Langchain Expression Language 
+    result = rag_chain.invoke(input=input)
+    print(result)
+    return str(result)
 
 
 if __name__ == "__main__":

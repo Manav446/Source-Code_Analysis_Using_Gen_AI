@@ -9,6 +9,8 @@ from langchain.document_loaders.parsers import LanguageParser
 from langchain.vectorstores import Chroma
 from langchain.memory import ConversationSummaryMemory
 from langchain.chains import ConversationalRetrievalChain
+from langchain.prompts import PromptTemplate
+from langchain.schema.prompt_template import format_document
 
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 
@@ -64,3 +66,20 @@ def document_splitter(document):
 def load_embedding_model():
     logger.info("Entering into load_embedding_model.......")
     return GoogleGenerativeAIEmbeddings(google_api_key=os.getenv("GEMINI_API_KEY"), model=constants.EMBEDDING_MODEL_NAME)
+
+def get_prompt():
+    logger.info("Getting the prompt for LLM model.........")
+    try:
+        prompt_template = """You are an powerful assistantfor question-answering tasks You have to tell the Usr.
+        Use the following context to answer the question.
+        If you don't know the answer, just say that you don't know.
+        Use five sentences maximum and keep the answer concise.\n
+        Question: {question} \nContext: {context} \nAnswer:
+        """
+
+        return PromptTemplate.from_template(prompt_template)
+    except Exception as e:
+        raise CustomException(e, sys)
+    
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
