@@ -40,7 +40,7 @@ Contributions are welcome! If you have suggestions for improvements or new featu
 Clone the repository
 
 ```bash / CMD
-Project repo: https://github.com/
+Project repo: https://github.com/Manav446/Source-Code_Analysis_Using_Gen_AI.git
 ```
 ### STEP 01- Create a conda environment after opening the repository
 
@@ -80,4 +80,4 @@ Now,
 open up localhost:
 ```
 
-### I have used Google Gemini Open Source API for this project. It's totally upto you which API you guys want to use. Either you guys can use the OpenAI API or Hugging Face Open Source API model too. 
+### I have utilized the Google Gemini Open Source API for this project. However, you can choose to use any API that suits your needs, including the OpenAI API or Hugging Face models.
